@@ -1,20 +1,90 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+import { MyTabBar } from "./src/components/MyTabBar";
+import { PokedexIcon, FavoritesIcon } from "./src/components/Icons";
 
-export default function App() {
+import HomeScreen from "./src/screens/HomeScreen";
+import FavoritesScreen from "./src/screens/FavoritesScreen";
+
+export type PokedexStackParamList = {
+  Home: undefined;
+  // PokemonDetail: { id: number };
+};
+
+export type FavoritesStackParamList = {
+  Favorites: undefined;
+};
+
+export type RootTabsParamList = {
+  Pokédex: undefined;
+  Favoritos: undefined;
+};
+
+const PokedexStack = createNativeStackNavigator<PokedexStackParamList>();
+const FavoritesStack = createNativeStackNavigator<FavoritesStackParamList>();
+const Tab = createBottomTabNavigator<RootTabsParamList>();
+
+function PokedexStackNavigator() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <PokedexStack.Navigator>
+      <PokedexStack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ title: "Pokédex"}}
+      />
+    </PokedexStack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function FavoritesStackNavigator() {
+  return (
+    <FavoritesStack.Navigator>
+      <FavoritesStack.Screen
+        name="Favorites"
+        component={FavoritesScreen}
+        options={{ title: "Favoritos" }}
+      />
+    </FavoritesStack.Navigator>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer
+        theme={{
+          ...DefaultTheme,
+          colors: { ...DefaultTheme.colors, background: "#f8fafc" },
+        }}
+      >
+        <Tab.Navigator
+          tabBar={(props) => <MyTabBar {...props} />}
+          screenOptions={{ headerShown: false }}
+        >
+          <Tab.Screen
+            name="Inicio"
+            component={PokedexStackNavigator}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <PokedexIcon size={size} color={color} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Favoritos"
+            component={FavoritesStackNavigator}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <FavoritesIcon size={size} color={color} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+      <StatusBar style="auto" />
+    </SafeAreaProvider>
+  );
+}
