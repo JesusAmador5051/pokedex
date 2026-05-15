@@ -8,9 +8,7 @@ interface UsePokemonDetailResult {
   error: string | null;
 }
 
-export function usePokemonDetail(
-  idOrName: number | string,
-): UsePokemonDetailResult {
+export function usePokemonDetail(id: number): UsePokemonDetailResult {
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,7 +20,7 @@ export function usePokemonDetail(
     setError(null);
     setPokemon(null);
 
-    getPokemonDetail(idOrName)
+    getPokemonDetail(id)
       .then((data) => {
         if (!cancelled) setPokemon(data);
       })
@@ -36,7 +34,7 @@ export function usePokemonDetail(
     return () => {
       cancelled = true;
     };
-  }, [idOrName]);
+  }, [id]);
 
   return { pokemon, loading, error };
 }

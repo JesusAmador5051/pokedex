@@ -41,9 +41,7 @@ export async function getPokemonList(
   }));
 }
 
-export async function getPokemonDetail(
-  idOrName: number | string,
-): Promise<Pokemon> {
-  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${idOrName}`);
+export async function getPokemonDetail(id: number): Promise<Pokemon> {
+  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${id}`);
   return data;
 }
