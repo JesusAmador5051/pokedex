@@ -9,29 +9,9 @@ import {
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { PokedexStackParamList } from "../../App";
 import { usePokemonDetail } from "../hooks/usePokemonDetail";
+import { TYPE_COLORS } from "../constants/typeColors";
 
-const TYPE_COLORS: Record<string, string> = {
-  fire: "#F08030",
-  water: "#6890F0",
-  grass: "#78C850",
-  electric: "#F8D030",
-  psychic: "#F85888",
-  ice: "#98D8D8",
-  dragon: "#7038F8",
-  dark: "#705848",
-  fairy: "#EE99AC",
-  fighting: "#C03028",
-  flying: "#A890F0",
-  poison: "#A040A0",
-  ground: "#E0C068",
-  rock: "#B8A038",
-  bug: "#A8B820",
-  ghost: "#705898",
-  steel: "#B8B8D0",
-  normal: "#A8A878",
-};
-
-// Nombres legibles para cada stat de la API
+// Nombres legibles para cada stat
 const STAT_LABELS: Record<string, string> = {
   hp: "HP",
   attack: "ATK",
@@ -41,7 +21,6 @@ const STAT_LABELS: Record<string, string> = {
   speed: "SPD",
 };
 
-// El valor máximo teórico de cualquier stat base en los juegos es 255
 const MAX_STAT = 255;
 
 type Props = NativeStackScreenProps<PokedexStackParamList, "PokemonDetail">;
@@ -126,7 +105,7 @@ export default function DetailScreen({ route }: Props) {
         </View>
       </View>
 
-      {/* Estadísticas base */}
+      {/* Estadísticas */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Estadísticas base</Text>
         {pokemon.stats.map((s) => (
