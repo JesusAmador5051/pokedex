@@ -8,10 +8,11 @@ import { PokedexIcon, FavoritesIcon } from "./src/components/Icons";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import FavoritesScreen from "./src/screens/FavoritesScreen";
+import DetailScreen from "./src/screens/DetailScreen";
 
 export type PokedexStackParamList = {
   Home: undefined;
-  // PokemonDetail: { id: number };
+  PokemonDetail: { id: number };
 };
 
 export type FavoritesStackParamList = {
@@ -19,7 +20,7 @@ export type FavoritesStackParamList = {
 };
 
 export type RootTabsParamList = {
-  Pokédex: undefined;
+  Inicio: undefined;
   Favoritos: undefined;
 };
 
@@ -33,7 +34,12 @@ function PokedexStackNavigator() {
       <PokedexStack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: "Pokédex"}}
+        options={{ title: "Pokédex" }}
+      />
+      <PokedexStack.Screen
+        name="PokemonDetail"
+        component={DetailScreen}
+        options={{ title: "" }}
       />
     </PokedexStack.Navigator>
   );

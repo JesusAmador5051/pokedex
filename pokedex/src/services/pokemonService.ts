@@ -40,3 +40,10 @@ export async function getPokemonList(
     types: data.types.map((t) => t.type.name),
   }));
 }
+
+export async function getPokemonDetail(
+  idOrName: number | string,
+): Promise<Pokemon> {
+  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${idOrName}`);
+  return data;
+}

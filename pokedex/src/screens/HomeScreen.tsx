@@ -5,11 +5,15 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from "react-native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+import type { PokedexStackParamList } from "../../App";
 import { usePokemonList } from "../hooks/usePokemonList";
 import { PokemonCard } from "../components/PokemonCard";
 import type { PokemonSummary } from "../types/pokemon";
 
-export default function HomeScreen() {
+type Props = NativeStackScreenProps<PokedexStackParamList, "Home">;
+
+export default function HomeScreen({ navigation }: Props) {
   const { pokemon, loading, error } = usePokemonList(40);
 
   if (loading) {
@@ -45,7 +49,12 @@ export default function HomeScreen() {
         keyExtractor={(item) => String(item.id)}
         numColumns={2}
         renderItem={({ item }: { item: PokemonSummary }) => (
-          <PokemonCard pokemon={item} onPress={() => {}} />
+          <PokemonCard
+            pokemon={item}
+            onPress={() =>
+              navigation.navigate("PokemonDetail", { id: item.id })
+            }
+          />
         )}
         contentContainerStyle={styles.list}
       />
