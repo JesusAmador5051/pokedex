@@ -1,15 +1,19 @@
+import { useEffect } from "react";
 import {
   View,
   Text,
   Image,
   ScrollView,
+  TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
 } from "react-native";
 import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 import type { PokedexStackParamList } from "../../App";
 import { usePokemonDetail } from "../hooks/usePokemonDetail";
+import { useFavorites } from "../context/FavoritesContext";
 import { TYPE_COLORS } from "../constants/typeColors";
+import { HeartIcon, HeartOutlineIcon, AlertIcon } from "../components/Icons";
 
 // Nombres legibles para cada stat
 const STAT_LABELS: Record<string, string> = {
@@ -25,9 +29,38 @@ const MAX_STAT = 255;
 
 type Props = NativeStackScreenProps<PokedexStackParamList, "PokemonDetail">;
 
-export default function DetailScreen({ route }: Props) {
+export default function DetailScreen({ route, navigation }: Props) {
   const { id } = route.params;
   const { pokemon, loading, error } = usePokemonDetail(id);
+  const { isFavorite, toggleFavorite } = useFavorites();
+
+  // Inyecta el botón de favorito en el header de navegación una vez que el pokémon carga
+  useEffect(() => {
+    if (!pokemon) return;
+
+    const summary = {
+      id: pokemon.id,
+      name: pokemon.name,
+      imageUrl:
+        pokemon.sprites.other["official-artwork"].front_default ??
+        pokemon.sprites.front_default ??
+        "",
+      types: pokemon.types.map((t) => t.type.name),
+    };
+
+    const fav = isFavorite(pokemon.id);
+
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => toggleFavorite(summary)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+        >
+          {fav ? <HeartIcon /> : <HeartOutlineIcon />}
+        </TouchableOpacity>
+      ),
+    });
+  }, [pokemon, isFavorite, toggleFavorite, navigation]);
 
   if (loading) {
     return (
@@ -40,6 +73,7 @@ export default function DetailScreen({ route }: Props) {
   if (error || !pokemon) {
     return (
       <View style={styles.centered}>
+        <AlertIcon />
         <Text style={styles.errorText}>{error ?? "Error desconocido"}</Text>
       </View>
     );
@@ -144,6 +178,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    gap: 12,
   },
   errorText: {
     fontSize: 14,

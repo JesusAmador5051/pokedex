@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { MyTabBar } from "./src/components/MyTabBar";
 import { PokedexIcon, FavoritesIcon } from "./src/components/Icons";
+import { FavoritesProvider } from "./src/context/FavoritesContext";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import FavoritesScreen from "./src/screens/FavoritesScreen";
@@ -17,6 +18,7 @@ export type PokedexStackParamList = {
 
 export type FavoritesStackParamList = {
   Favorites: undefined;
+  PokemonDetail: { id: number };
 };
 
 export type RootTabsParamList = {
@@ -53,6 +55,11 @@ function FavoritesStackNavigator() {
         component={FavoritesScreen}
         options={{ title: "Favoritos" }}
       />
+      <FavoritesStack.Screen
+        name="PokemonDetail"
+        component={DetailScreen}
+        options={{ title: "" }}
+      />
     </FavoritesStack.Navigator>
   );
 }
@@ -60,37 +67,39 @@ function FavoritesStackNavigator() {
 export default function App() {
   return (
     <SafeAreaProvider>
-      <NavigationContainer
-        theme={{
-          ...DefaultTheme,
-          colors: { ...DefaultTheme.colors, background: "#f8fafc" },
-        }}
-      >
-        <Tab.Navigator
-          tabBar={(props) => <MyTabBar {...props} />}
-          screenOptions={{ headerShown: false }}
+      <FavoritesProvider>
+        <NavigationContainer
+          theme={{
+            ...DefaultTheme,
+            colors: { ...DefaultTheme.colors, background: "#f8fafc" },
+          }}
         >
-          <Tab.Screen
-            name="Inicio"
-            component={PokedexStackNavigator}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <PokedexIcon size={size} color={color} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Favoritos"
-            component={FavoritesStackNavigator}
-            options={{
-              tabBarIcon: ({ color, size }) => (
-                <FavoritesIcon size={size} color={color} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </NavigationContainer>
-      <StatusBar style="auto" />
+          <Tab.Navigator
+            tabBar={(props) => <MyTabBar {...props} />}
+            screenOptions={{ headerShown: false }}
+          >
+            <Tab.Screen
+              name="Inicio"
+              component={PokedexStackNavigator}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <PokedexIcon size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Favoritos"
+              component={FavoritesStackNavigator}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <FavoritesIcon size={size} color={color} />
+                ),
+              }}
+            />
+          </Tab.Navigator>
+        </NavigationContainer>
+        <StatusBar style="auto" />
+      </FavoritesProvider>
     </SafeAreaProvider>
   );
 }

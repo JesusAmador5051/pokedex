@@ -61,3 +61,11 @@ export interface PokemonSummary {
   imageUrl: string;
   types: string[];
 }
+
+export interface TypeListResponse {
+  results: NamedResource[];
+}
+
+export interface TypeDetailResponse {
+  pokemon: { pokemon: NamedResource }[];
+}
