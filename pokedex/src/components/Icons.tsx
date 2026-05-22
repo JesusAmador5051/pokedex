@@ -38,3 +38,12 @@ export const EmptyIcon = (props: any) => (
     {...props}
   />
 );
+
+export const CompareIcon = (props: any) => (
+  <MaterialCommunityIcons
+    name="scale-balance"
+    size={24}
+    color="black"
+    {...props}
+  />
+);

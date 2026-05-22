@@ -4,12 +4,17 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { MyTabBar } from "./src/components/MyTabBar";
-import { PokedexIcon, FavoritesIcon } from "./src/components/Icons";
+import {
+  PokedexIcon,
+  FavoritesIcon,
+  CompareIcon,
+} from "./src/components/Icons";
 import { FavoritesProvider } from "./src/context/FavoritesContext";
 
 import HomeScreen from "./src/screens/HomeScreen";
 import FavoritesScreen from "./src/screens/FavoritesScreen";
 import DetailScreen from "./src/screens/DetailScreen";
+import CompareScreen from "./src/screens/CompareScreen";
 
 export type PokedexStackParamList = {
   Home: undefined;
@@ -21,13 +26,19 @@ export type FavoritesStackParamList = {
   PokemonDetail: { id: number };
 };
 
+export type CompareStackParamList = {
+  Compare: undefined;
+};
+
 export type RootTabsParamList = {
   Inicio: undefined;
   Favoritos: undefined;
+  Comparar: undefined;
 };
 
 const PokedexStack = createNativeStackNavigator<PokedexStackParamList>();
 const FavoritesStack = createNativeStackNavigator<FavoritesStackParamList>();
+const CompareStack = createNativeStackNavigator<CompareStackParamList>();
 const Tab = createBottomTabNavigator<RootTabsParamList>();
 
 function PokedexStackNavigator() {
@@ -64,6 +75,18 @@ function FavoritesStackNavigator() {
   );
 }
 
+function CompareStackNavigator() {
+  return (
+    <CompareStack.Navigator>
+      <CompareStack.Screen
+        name="Compare"
+        component={CompareScreen}
+        options={{ title: "Comparador" }}
+      />
+    </CompareStack.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <SafeAreaProvider>
@@ -93,6 +116,15 @@ export default function App() {
               options={{
                 tabBarIcon: ({ color, size }) => (
                   <FavoritesIcon size={size} color={color} />
+                ),
+              }}
+            />
+            <Tab.Screen
+              name="Comparar"
+              component={CompareStackNavigator}
+              options={{
+                tabBarIcon: ({ color, size }) => (
+                  <CompareIcon size={size} color={color} />
                 ),
               }}
             />

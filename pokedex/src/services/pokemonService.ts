@@ -82,3 +82,10 @@ export async function getPokemonByType(
     types: d.types.map((t) => t.type.name),
   }));
 }
+
+// Busca un Pokémon por nombre exacto o número
+export async function searchPokemon(query: string): Promise<Pokemon> {
+  const normalized = query.trim().toLowerCase();
+  const { data } = await pokeApi.get<Pokemon>(`/pokemon/${normalized}`);
+  return data;
+}
